@@ -126,7 +126,9 @@ Why are they different? What is there at the second breakpoint? (You do not real
 #### Exercise 8
 ```
 [Steps]
-
+1. Challenge: colorful console
+    Due to Windows cant provide hardware simulator so will do it later.
+     
 [What should i learn in this exercise ?]
 
 [Questions]

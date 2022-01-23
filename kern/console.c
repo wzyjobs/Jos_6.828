@@ -474,3 +474,9 @@ iscons(int fdnum)
 	// used by readline
 	return 1;
 }
+
+int
+setcolor(enum ASCII_COLOR color, int c)
+{
+    return c | color;
+}
