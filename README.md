@@ -184,6 +184,63 @@ so that the last argument is pushed last.
 How would you have to change cprintf or its interface \
 so that it would still be possible to pass it a variable number of arguments?
 ```
+## The Stack
+#### Exercise 9
+```
+[Steps]
+1. Determine where the kernel initializes its stack, and exactly where in memory its stack is located. 
+How does the kernel reserve space for its stack? 
+And at which "end" of this reserved area is the stack pointer initialized to point to?
+[What should i learn in this exercise ?]
+
+[Questions]
+```
+
+#### Exercise 10
+```
+[Steps]
+1. To become familiar with the C calling conventions on the x86, 
+find the address of the test_backtrace function in obj/kern/kernel.asm, 
+set a breakpoint there, and examine what happens each time it gets called after the kernel starts. 
+How many 32-bit words does each recursive nesting level of test_backtrace push on the stack, and what are those words?
+
+Note that, for this exercise to work properly, 
+you should be using the patched version of QEMU available on the tools page or on Athena. 
+Otherwise, you'll have to manually translate all breakpoint and memory addresses to linear addresses.
+[What should i learn in this exercise ?]
+
+[Questions]
+```
+
+#### Exercise 11
+```
+[Steps]
+1. Implement the backtrace function as specified above. 
+Use the same format as in the example, since otherwise the grading script will be confused. 
+When you think you have it working right, 
+run make grade to see if its output conforms to what our grading script expects, 
+and fix it if it doesn't. After you have handed in your Lab 1 code, 
+you are welcome to change the output format of the backtrace function any way you like.
+
+If you use read_ebp(), 
+note that GCC may generate "optimized" code that calls read_ebp() before mon_backtrace()'s function prologue, 
+which results in an incomplete stack trace (the stack frame of the most recent function call is missing). 
+While we have tried to disable optimizations that cause this reordering, 
+you may want to examine the assembly of mon_backtrace() and make sure the call to read_ebp() is happening after the function prologue.
+[What should i learn in this exercise ?]
+
+[Questions]
+```
+
+#### Exercise 12
+```
+[Steps]
+
+[What should i learn in this exercise ?]
+
+[Questions]
+```
+
 
 #### Exercise ?
 ```
