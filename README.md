@@ -235,7 +235,35 @@ you may want to examine the assembly of mon_backtrace() and make sure the call t
 #### Exercise 12
 ```
 [Steps]
+1. Modify your stack backtrace function to display, for each eip, the function name, source file name, and line number corresponding to that eip.
 
+In debuginfo_eip, where do __STAB_* come from? This question has a long answer; to help you to discover the answer, here are some things you might want to do:
+
+look in the file kern/kernel.ld for __STAB_*
+run objdump -h obj/kern/kernel
+run objdump -G obj/kern/kernel
+run gcc -pipe -nostdinc -O2 -fno-builtin -I. -MD -Wall -Wno-format -DJOS_KERNEL -gstabs -c -S kern/init.c, and look at init.s.
+see if the bootloader loads the symbol table in memory as part of loading the kernel binary
+Complete the implementation of debuginfo_eip by inserting the call to stab_binsearch to find the line number for an address.
+
+Add a backtrace command to the kernel monitor, and extend your implementation of mon_backtrace to call debuginfo_eip and print a line for each stack frame of the form:
+
+K> backtrace
+Stack backtrace:
+  ebp f010ff78  eip f01008ae  args 00000001 f010ff8c 00000000 f0110580 00000000
+         kern/monitor.c:143: monitor+106
+  ebp f010ffd8  eip f0100193  args 00000000 00001aac 00000660 00000000 00000000
+         kern/init.c:49: i386_init+59
+  ebp f010fff8  eip f010003d  args 00000000 00000000 0000ffff 10cf9a00 0000ffff
+         kern/entry.S:70: <unknown>+0
+K> 
+Each line gives the file name and line within that file of the stack frame's eip, followed by the name of the function and the offset of the eip from the first instruction of the function (e.g., monitor+106 means the return eip is 106 bytes past the beginning of monitor).
+
+Be sure to print the file and function names on a separate line, to avoid confusing the grading script.
+
+Tip: printf format strings provide an easy, albeit obscure, way to print non-null-terminated strings like those in STABS tables. printf("%.*s", length, string) prints at most length characters of string. Take a look at the printf man page to find out why this works.
+
+You may find that some functions are missing from the backtrace. For example, you will probably see a call to monitor() but not to runcmd(). This is because the compiler in-lines some function calls. Other optimizations may cause you to see unexpected line numbers. If you get rid of the -O2 from GNUMakefile, the backtraces may make more sense (but your kernel will run more slowly).
 [What should i learn in this exercise ?]
 
 [Questions]
