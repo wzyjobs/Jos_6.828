@@ -103,6 +103,17 @@ boot_alloc(uint32_t n)
 	//
 	// LAB 2: Your code here.
 
+	if (n != 0)
+	{
+		char *current_page = nextfree;
+		nextfree = ROUNDUP((char *)nextfree + n, PGSIZE);
+		return current_page;
+	}
+	else
+	{
+		return nextfree;
+	}
+
 	return NULL;
 }
 
