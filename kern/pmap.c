@@ -159,7 +159,9 @@ mem_init(void)
 	// array.  'npages' is the number of physical pages in memory.  Use memset
 	// to initialize all fields of each struct PageInfo to 0.
 	// Your code goes here:
-
+	uint32_t pageInfo_array_byte_len = sizeof(struct PageInfo) * npages;
+	pages = (struct PageInfo *)boot_alloc(pageInfo_array_byte_len);
+	memset(pages, 0, pageInfo_array_byte_len);
 
 	//////////////////////////////////////////////////////////////////////
 	// Now that we've allocated the initial kernel data structures, we set
