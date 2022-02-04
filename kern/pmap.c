@@ -265,7 +265,18 @@ page_init(void)
 	// NB: DO NOT actually touch the physical memory corresponding to
 	// free pages!
 	size_t i;
-	for (i = 0; i < npages; i++) {
+	for (i = 1; i < npages_basemem; i++)
+	{
+		pages[i].pp_ref = 0;
+		pages[i].pp_link = page_free_list;
+		page_free_list = &pages[i];
+	}
+
+	//we already init this part memory
+	size_t mem_location = (size_t)ROUNDUP((char *)pages + (sizeof(struct PageInfo) * npages) - KERNBASE, PGSIZE) / PGSIZE;
+
+	for (i = mem_location; i < npages; i++)
+	{
 		pages[i].pp_ref = 0;
 		pages[i].pp_link = page_free_list;
 		page_free_list = &pages[i];
