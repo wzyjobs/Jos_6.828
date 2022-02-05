@@ -298,8 +298,23 @@ page_init(void)
 struct PageInfo *
 page_alloc(int alloc_flags)
 {
-	// Fill this function in
-	return 0;
+
+	if (!page_free_list)
+	{
+		return NULL;
+	}
+
+	struct PageInfo *current_free_page = page_free_list;
+	page_free_list = current_free_page->pp_link;
+	current_free_page->pp_link = NULL;
+
+	if (alloc_flags & ALLOC_ZERO)
+	{
+		void *page_kernel_virtual_address = page2kva(current_free_page);
+		memset(page_kernel_virtual_address, '\0', PGSIZE);
+	}
+
+	return current_free_page;
 }
 
 //
